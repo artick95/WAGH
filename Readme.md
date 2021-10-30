@@ -21,7 +21,7 @@ https://www.coingecko.com/en/api/documentation
 
 pip install shub
 shub login
-API key: 4c210cbc255d48278ba5e367cb67f02d
+API key: 
 shub deploy 564603
 
 
