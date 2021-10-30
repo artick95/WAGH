@@ -1,11 +1,11 @@
 from scrapy.spiders import SitemapSpider
 
 
-class IcoSpider(SitemapSpider):
-    name = 'ico'
+class icobench(SitemapSpider):
+    name = 'icobench'
     sitemap_urls = ['https://icobench.com/sitemap-ico.xml']
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'
-    download_delay = 1.0
+    #download_delay = 1.0
 
     def parse(self, response):
         
@@ -22,10 +22,10 @@ class IcoSpider(SitemapSpider):
         }
 
         try:
-            data['social1'] = response.css(
+            data['social0'] = response.css(
                 'div.socials>a::attr(href)').extract()[0]
         except:
-            data['social1'] = ''
+            data['social0'] = ''
 
         try:
             data['social1'] = response.css(

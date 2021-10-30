@@ -13,33 +13,34 @@ class ToScrapeCSSSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        ICOs =  response.xpath('//tbody/tr[*]')
+        table =  response.css('table.cmc-table>tbody>trtd>a::attr(href)').extract
+        rows=table.css('tbody>tr')
         domain='https://coinmarketcap.com/en'
 
 
-        for ICO in ICOs:
+        for row in rows:
             data= {
-                'icoName': ICO.css('span.bogImm::text').extract_first(),
-                'urlCMC':domain + ICO.css('a.cmc-link::attr(href)').extract()[0],
+                'icoName': row.css('span.bogImm::text').extract_first(),
+                'urlCMC':domain + row.css('td>a::attr(href)').extract_first(),
                 'url':'',
-                'stage': ICO.css('span.gbZOJJ::text').extract_first(),
+                'stage': row.css('span.gbZOJJ::text').extract_first(),
                 'StartDate': '',
                 'EndDate':'',
                 'Goal':''
             }
 
             try:
-                data['StartDate']=ICO.css('td::text').extract()[0]
+                data['StartDate']=row.css('td::text').extract()[0]
             except:
                 data['StartDate']='----'
             
             try:
-                data['EndDate']=ICO.css('td::text').extract()[1]
+                data['EndDate']=row.css('td::text').extract()[1]
             except:
                 data['EndDate']='----'
 
             try:
-                data['Goal']=ICO.css('td::text').extract()[2]
+                data['Goal']=row.css('td::text').extract()[2]
             except:
                 data['Goal']='----'
 
