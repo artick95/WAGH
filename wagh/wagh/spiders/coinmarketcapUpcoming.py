@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 
-class ToScrapeCSSSpider(scrapy.Spider):
-    name = "coinmarketcap"
+class coinmarketcapU(scrapy.Spider):
+    name = "coinmarketcapU"
 
     #Input = Start Urls
     start_urls = [
