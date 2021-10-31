@@ -10,5 +10,6 @@ wagh/middlewares.py
 wagh/pipelines.py
 wagh/settings.py
 wagh/spiders/__init__.py
-wagh/spiders/coinmarketcap.py
+wagh/spiders/appl.py
+wagh/spiders/coinmarketcapUpcoming.py
 wagh/spiders/icob3nch.py

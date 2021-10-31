@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy_splash import SplashRequest
-from urllib.parse import urlencode
 
 
 class coinmarketcapU(scrapy.Spider):
     name = "coinmarketcapU"
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36"
-
-    def process_links(self, links):
-        for link in links:
-            link.url = "http://localhost:8050/render.html?" + urlencode(
-                {"url": link.url}
-            )
-        return links
 
     # Input = Start Urls
 
@@ -27,7 +19,7 @@ class coinmarketcapU(scrapy.Spider):
             yield SplashRequest(url=url, callback=self.parse, args={"wait": 5})
 
     def parse(self, response):
-        domain = "https://www.coinmarketcap.com"
+        domain = coinmarketcapU.base + "https://www.coinmarketcap.com"
         urls_end = response.css("table.cmc-table>tbody>tr>td>a::attr(href)").extract()
 
         for url in urls_end:
