@@ -1,45 +1,32 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy_splash import SplashRequest
-from urllib.parse import urlencode
+from scrapy.linkextractors import LinkExtractor
 
 
-class coinmarketcapU(scrapy.Spider):
-    name = "coinmarketcapU"
+class message(scrapy.Spider):
+    name = "message"
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36"
 
-    # def process_links(self, links):
-    #     for link in links:
-    #         link.url = "http://localhost:8050/render.html?" + urlencode(
-    #             {"url": link.url}
-    #         )
-    #     return links
-
-    # Input = Start Urls
-
-    # base = "http://localhost:8050/render.html?url="
     start_urls = [
-        "http://localhost:8050/render.html?url=https://coinmarketcap.com/ico-calendar/upcoming/",
+        "https://coinmarketcap.com/ico-calendar/upcoming/",
     ]
 
-    def start_requests(self):
-        for url in self.start_urls:
-            yield SplashRequest(url=url, callback=self.parse, args={"wait": 5})
-
     def parse(self, response):
-        domain = "http://localhost:8050/render.html?url=https://www.coinmarketcap.com"
-        urls_end = response.css("table.cmc-table>tbody>tr>td>a::attr(href)").extract()
+        le = LinkExtractor()
+        for link in le.extract_links(response):
+            yield SplashRequest(
+                link.url,
+                self.parse_ico,
+                endpoint="render.json",
+                args={"har": 1, "html": 1,"wait":8},
+            )
 
-        for url in urls_end:
-            next_page = domain + url
-            # yield response.follow(next_page, callback=self.ico_details)
-            yield SplashRequest(next_page, callback=self.ico_details)
+    def parse_ico(self, response):
 
-    def ico_details(self, response):
         data = {
             "name": response.css("div.nameHeader>h2::text").extract_first(),
             "website": response.css("a.link-button::attr(href)").extract_first(),
-            "URLCoinmarketcap": response.url,
         }
 
         try:
@@ -180,3 +167,4 @@ class coinmarketcapU(scrapy.Spider):
         except:
             data["social6"] = ""
         yield data
+
